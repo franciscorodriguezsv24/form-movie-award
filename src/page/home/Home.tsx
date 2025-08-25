@@ -14,7 +14,7 @@ export const Home = () => {
 			<Form/>
 		</div>
 		<div className={styles.footerForm}>
-g
+			&copy; The Oscars 2025
 		</div>
 	</div>
   )

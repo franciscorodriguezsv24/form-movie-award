@@ -4,11 +4,12 @@
     max-width: 100%;
     grid-template-columns: 1fr 1fr;
     gap: 2rem;
+    padding: 2rem;
     @media (max-width: 800px) {
         grid-template-columns: 1fr;
         gap: 1rem;
     }
-    padding: 2rem;
+
 }
 
 .inputContainer{

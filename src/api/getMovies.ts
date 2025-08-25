@@ -1,14 +1,16 @@
-const url = "https://api.themoviedb.org/3/movie/popular?language=en-US&page=1";
-const options = {
-  method: "GET",
-  headers: {
-    accept: 'application/json',
-    Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxNjVhNzdiMDIyN2FjYmNkM2VmYWJlOWJkMTljNjlkYiIsIm5iZiI6MTc1NTgwMzU5NS42MSwic3ViIjoiNjhhNzZmY2I0NjMwZTFlYTM4ZmQyYzQyIiwic2NvcGVzIjpbImFwaV9yZWFkIl0sInZlcnNpb24iOjF9.LCHRnrTWjSAJkXm_rg_nzHZkEWms6XdjBm97T-Gby6w'
-  }
-};
+// api/getMovies.ts
+const accessToken = import.meta.env.VITE_ACCESS_KEY;
 
-const moviesPromise = fetch(url, options).then(res => res.json());
+export function getMovies(page: number = 1) {
+  const url = `https://api.themoviedb.org/3/movie/popular?language=en-US&page=${page}`;
 
-export function getMovies() {
-  return moviesPromise
+  const options = {
+    method: "GET",
+    headers: {
+      accept: "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+  };
+
+  return fetch(url, options).then((res) => res.json());
 }
