@@ -22,11 +22,12 @@ import { useVirtualizer } from "@tanstack/react-virtual";
 
     type PropsMovieInformation = {
         setMovieData: React.Dispatch<React.SetStateAction<MovieInformation | undefined>>;
+        resetSignal?: boolean;
     }
     
 
 
-export const Combobox = ({setMovieData} : PropsMovieInformation) => {
+export const Combobox = ({setMovieData, resetSignal} : PropsMovieInformation) => {
     const [input, setInput] = useState<string>('')
     const [returnValue, setReturnValue] = useState<string>('')
     const [showUl, setShowUl] = useState<boolean>(false)
@@ -35,7 +36,13 @@ export const Combobox = ({setMovieData} : PropsMovieInformation) => {
     const [page, setPage] = useState<number>(1);
     const [moviesData, setMoviesData] = useState<MovieInformation[]>([]);
 
+    useEffect(() => {
+        setInput('');
+        setReturnValue('');
+        setShowUl(false);
+    }, [resetSignal]);
 
+    
     useEffect(() => {
         getMovies(page).then((data) => 
             setMoviesData(
@@ -71,7 +78,6 @@ export const Combobox = ({setMovieData} : PropsMovieInformation) => {
         const { scrollTop, scrollHeight, clientHeight } = ulRef.current;
 
         if (scrollTop + clientHeight >= scrollHeight - 100 && !loading) {
-            console.log('Cerca del final, cargando más...')
             setLoading(true);
         }
         
@@ -82,7 +88,6 @@ export const Combobox = ({setMovieData} : PropsMovieInformation) => {
         setReturnValue(id)
         setShowUl(false)
         setMovieData(item)
-        console.log(`input is now ${input}`)
     }
 
     function debounce<T extends (...args: unknown[]) => void>(func: T, delay: number) {
@@ -108,10 +113,7 @@ export const Combobox = ({setMovieData} : PropsMovieInformation) => {
     useEffect(() => {
         const ulElement = ulRef.current;
 
-        console.log(ulElement)
-        console.log('testing')
         if (ulElement) {
-            console.log('testing element inside if')
             const debouncedHandleScroll = debounce(handleScroll, 500);
             ulElement.addEventListener("scroll", debouncedHandleScroll);
             
@@ -149,7 +151,7 @@ export const Combobox = ({setMovieData} : PropsMovieInformation) => {
                     >
                         <li style={{
                             height: `${rowVietualizer.getTotalSize()}px`,
-                            listStyle: 'none'
+                            listStyle: 'none',
                         }}/>
                     {rowVietualizer.getVirtualItems().map((virtualItem) => {
                         const item = filteredArray[virtualItem.index]
@@ -164,9 +166,12 @@ export const Combobox = ({setMovieData} : PropsMovieInformation) => {
                                 style={{
                                     position: 'absolute',
                                     top: 0,
-                                    color: 'red',
+                                    color: 'black',
                                     left: 0,
                                     width: '100%',
+                                    whiteSpace: 'nowrap',
+                                    textOverflow: 'ellipsis',
+                                    overflow: 'hidden',
                                     height: `${size}px`,
                                     transform: `translateY(${start}px)`,
                                     border: 'none',
